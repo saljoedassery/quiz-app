@@ -1,38 +1,504 @@
-.App {
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100vh;
+  font-family: "Open Sans", sans-serif !important;
+  background-color: #f7f7f7 !important;
+}
+
+/* Main component */
+
+.main {
+  width: 70%;
+  background-color: white;
+  margin: 40px auto;
+}
+
+/* Header */
+
+.header {
+  background-color: #232f3e;
+  color: white;
+  display: grid;
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  height: 118px;
+}
+
+.header h1 {
+  font-size: 50px;
+  font-weight: 600;
+}
+
+/* StartQuiz */
+
+.start-quiz {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  padding: 30px;
+}
+
+/* QuizProperty */
+
+.quiz-property {
+  text-align: center;
+  padding: 20px;
+}
+
+.category-div,
+.difficulty-div,
+.button-div {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.difficulty-div label {
+  margin-top: 20px;
+}
+
+.button-div button {
+  height: 40px !important;
+  margin-top: 20px;
+}
+
+.start-instructions {
+  font-size: 14px;
+  font-style: italic;
+  color: gray;
+  margin-top: 10px;
+}
+
+.alert-icon {
+  width: 15px;
+  margin-right: 5px;
+}
+
+.btn-primary {
+  color: #007bff !important;
+  background-color: white !important;
+}
+
+/* Instructions */
+
+.instructions {
+  padding: 20px 20px 20px 60px;
+  border-left: darkgrey 5px solid;
+}
+
+.instructions h2 {
+  margin-bottom: 30px;
+}
+
+.instructions li {
+  margin-bottom: 10px;
+}
+
+/* Play area */
+
+.play-area {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  padding: 10px;
+  column-gap: 30px;
+}
+
+/* QuizPlay */
+
+.question-navigation-area {
+  background-color: #efefef;
+  width: 100%;
+  border-top: 1px solid #b9b4b4;
+  border-bottom: 1px solid #b9b4b4;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.question-navigation-area button {
+  width: 35px;
+  height: 35px;
+  color: black;
+  background-color: white;
+  border: lightgray solid 1px;
+  margin-right: 1px;
+}
+
+.active-question {
+  background-color: darkgrey !important;
+  color: white !important;
+}
+
+.marked-question {
+  background-color: #6767de !important;
+  color: white !important;
+}
+
+.review-question {
+  background-color: #e2e20f !important;
+}
+
+.correct-question {
+  background-color: #59c759 !important;
+}
+
+.incorrect-question {
+  background-color: #ea5555 !important;
+}
+
+.question-navigation-area button:focus {
+  outline: none;
+}
+.question-navigation-area button:hover {
+  background-color: darkgrey;
+}
+
+.question-marking-indication {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  margin-top: 5px;
+}
+
+.answered-div,
+.review-div,
+.correct-div,
+.incorrect-div,
+.active-div,
+.unattended-div {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  grid-column-gap: 5px;
+}
+
+.question-marking-indication p {
+  display: inline;
+}
+
+.rectangle {
+  width: 20px;
+  height: 20px;
+}
+
+.answered-div .rectangle {
+  background-color: #6767de;
+}
+
+.review-div .rectangle {
+  background-color: #e2e20f;
+}
+
+.correct-div .rectangle {
+  background-color: #59c759;
+}
+
+.incorrect-div .rectangle {
+  background-color: #ea5555;
+}
+
+.active-div .rectangle {
+  background-color: darkgrey;
+}
+
+.unattended-div .rectangle {
+  border: 1px solid lightgray;
+}
+
+.action-button-div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.finish-button {
+  width: fit-content;
+  justify-self: end;
+  padding: 10px 15px;
+  background-color: #ea5555;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  font-weight: 900;
+  transition: background-color 0.15s ease;
+}
+
+.finish-button:hover {
+  background-color: #bf4545;
+}
+
+.finish-button:focus,
+.review-button:focus {
+  outline: none;
+}
+
+.review-button {
+  width: fit-content;
+  padding: 10px 15px;
+  background-color: #efad33;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  font-weight: 900;
+  transition: background-color 0.15s ease;
+}
+
+.review-button:hover {
+  background-color: #d0962d;
+}
+
+.question-detail-div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.total-time {
+  justify-self: end;
+}
+
+hr {
+  margin-top: 2px !important;
+  height: 2px !important;
+  background-color: #ea5555;
+}
+
+.question-navigation-div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 25px;
+}
+
+.question-navigation-div img {
+  width: 17px;
+}
+
+.next-button-div {
+  justify-self: end;
+}
+
+.next-button img {
+  margin-left: 10px;
+}
+
+.prev-button img {
+  margin-right: 10px;
+}
+
+.prev-button {
+  width: 150px;
+  border: none;
+  background-color: #807d7d;
+  color: white;
+  padding: 10px 10px;
+  border-radius: 5px;
+  text-align: center;
+  vertical-align: middle;
+  transition: background-color 0.15s ease;
+}
+
+.prev-button:hover {
+  background-color: #5f5e5e;
+}
+
+.prev-button:focus,
+.next-button:focus {
+  outline: none;
+}
+
+.next-button {
+  width: 150px;
+  border: none;
+  background-color: #2f2f2f;
+  color: white;
+  padding: 10px 10px;
+  border-radius: 5px;
+  text-align: center;
+  vertical-align: middle;
+  transition: background-color 0.15s ease;
+}
+
+.next-button:hover {
+  background-color: black;
+}
+
+/* Question */
+
+.question-text {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.option-div {
+  border: 1px solid lightgray;
+  margin-bottom: 12px;
+  border-radius: 5px;
+  padding: 4px 20px;
+}
+
+.choice {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.choice input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  text-align: center;
+  border: 1px solid gray;
+  font-size: 15px;
+  vertical-align: middle;
+}
+
+.choice:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.click input ~ .checkmark {
+  background-color: #6767de;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.correct-choice {
+  background-color: #59c759 !important;
+  color: white;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.incorrect-choice {
+  background-color: #ea5555;
+  color: white;
+}
+
+/* Result */
+
+.result {
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.counts {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 10px;
+  text-align: center;
+}
+
+.question-count,
+.point-count,
+.time-count {
+  background-color: #3d983d;
+  border-radius: 5px;
+  color: white;
+}
+
+.count-text {
+  font-size: 37px;
+  margin-bottom: 0px;
+}
+
+.indication-text {
+  font-size: 16px;
+}
+
+.statitics h2 {
+  margin-top: 30px;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 25px;
+  color: #868383;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.statitics p {
+  display: grid;
+  grid-template-columns: 2fr 0.5fr;
+  width: 80%;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.statitics p span {
+  font-size: 24px;
+  font-weight: 600;
+  color: gray;
+}
+
+.new-game-button-div {
+  display: grid;
+  grid-template-columns: 140px 50px;
+  width: 80%;
+  margin: 0 auto;
+  column-gap: 10px;
+  margin-top: 30px;
+}
+
+.try-again-button {
+  width: 140px;
+  padding: 10px 15px;
+  border: 1px solid #3d983d;
+  color: #3d983d;
+  border-radius: 5px;
+  font-weight: 900;
+  background-color: white;
+  transition: background-color 0.15s ease;
+}
+
+.try-again-button:hover {
+  background-color: #3d983d;
+  color: white;
+}
+
+.try-again-button:focus {
+  outline: none;
+}
+
+.home-button {
+  width: 50px;
+  padding: 10px 15px;
+  border: 1px solid #3d983d;
+  border-radius: 5px;
+  font-weight: 900;
+  background-color: white;
+  transition: background-color 0.15s ease;
+  color: #3d983d;
+}
+
+.home-button:focus {
+  outline: none;
+}
+
+.home-button:hover {
+  color: white;
+  background-color: #3d983d;
+}
+
+.inspiration-div {
+  text-align: center;
+}
+
+.inspiration-div p {
+  font-size: 18px;
+  color: #7d7777;
+  font-weight: 600;
+  margin-top: 20px;
 }
