@@ -49,7 +49,7 @@ class Result extends React.Component {
         <div className="new-game-button-div">
           <Link
             to={{
-              pathname: "/play",
+              pathname: "/quiz-app/play",
               properties: {
                 category: this.props.category,
                 difficulty: this.props.difficulty,
@@ -59,7 +59,7 @@ class Result extends React.Component {
           >
             <button className="try-again-button">Try Again</button>
           </Link>
-          <Link to="/">
+          <Link to="/quiz-app">
             <button className="home-button">
               <i className="fas fa-home"></i>
             </button>

@@ -97,7 +97,7 @@ class QuizProperty extends React.Component {
         <div className="button-div">
           <Link
             to={{
-              pathname: "/play",
+              pathname: "/quiz-app/play",
               properties: {
                 category: this.categoryMap[this.state.category],
                 difficulty: this.state.difficulty,
