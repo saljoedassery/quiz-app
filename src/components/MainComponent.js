@@ -28,7 +28,8 @@ class MainComponent extends React.Component {
           <Router>
             <Switch>
               <Route exact path="/" component={StartQuiz} />
-              <Route path="/play" component={PlayArea} />
+              <Route exact path="/quiz-app" component={StartQuiz} />
+              <Route path="/quiz-app/play" component={PlayArea} />
             </Switch>
           </Router>
         </div>
