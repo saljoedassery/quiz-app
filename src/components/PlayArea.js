@@ -16,6 +16,14 @@ class PlayArea extends React.Component {
     this.difficulty = "";
   }
 
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.location.properties.tryAgain !==
+      this.props.location.properties.tryAgain
+    )
+      this.findResult(0, 0);
+  }
+
   findResult = (totalQuestions, correct) => {
     var totalPoints = correct * 3 - (totalQuestions - correct);
     this.setState({

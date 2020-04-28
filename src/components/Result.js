@@ -52,8 +52,8 @@ class Result extends React.Component {
               pathname: "/play",
               properties: {
                 category: this.props.category,
-                difficulty: !this.props.difficulty,
-                tryAgain: true,
+                difficulty: this.props.difficulty,
+                tryAgain: !this.props.tryAgain,
               },
             }}
           >

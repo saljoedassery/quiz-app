@@ -9,8 +9,8 @@ class QuizProperty extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      category: "Any category",
-      difficulty: "Any difficulty level",
+      category: "General Knowledge",
+      difficulty: "easy",
     };
 
     this.categoryMap = {

@@ -24,12 +24,6 @@ class QuizPlay extends React.Component {
   }
 
   fetchData = () => {
-    console.log(
-      "fetching questions for category ",
-      this.props.category,
-      " and difficulty ",
-      this.props.difficulty
-    );
     let url = `https://opentdb.com/api.php?amount=20&type=multiple&category=${this.props.category}&difficulty=${this.props.difficulty}`;
     fetch(url)
       .then((response) => response.json())
@@ -44,7 +38,6 @@ class QuizPlay extends React.Component {
           this.optionsList.push(options);
           this.correctOptions.push(options.indexOf(question.correct_answer));
         });
-        console.log(this.optionsList, this.correctOptions);
         this.setState({
           questions: data.results,
           questionStats: questionStats,
@@ -58,15 +51,29 @@ class QuizPlay extends React.Component {
   };
 
   componentDidMount() {
-    this.setState({
-      loading: false,
-    });
     this.fetchData();
   }
 
+  componentWillUnmount() {
+    clearInterval(this.timer)
+  }
+
   componentDidUpdate(prevProps) {
-    console.log(prevProps.tryAgain, this.props.tryAgain);
     if (prevProps.tryAgain !== this.props.tryAgain){
+      this.setState({
+        activeQuestion: 0,
+        questions: [],
+        markedOptionsIndex: new Array(20),
+        questionStats: new Array(20),
+        minsLeft: "2",
+        secondsLeft: "00",
+        quizFinished: false,
+        actionsButtonStat: false,
+        loading: false,
+      });
+      this.correctOptions = [];
+      this.optionsList = [];
+      clearInterval(this.timer)
       this.fetchData();
     } 
   }
@@ -75,24 +82,17 @@ class QuizPlay extends React.Component {
     var currentIndex = array.length,
       temporaryValue,
       randomIndex;
-
-    // While there remain elements to shuffle...
     while (0 !== currentIndex) {
-      // Pick a remaining element...
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex -= 1;
-
-      // And swap it with the current element.
       temporaryValue = array[currentIndex];
       array[currentIndex] = array[randomIndex];
       array[randomIndex] = temporaryValue;
     }
-
     return array;
   };
 
   getOptions = (question) => {
-    // var question = this.state.questions[this.state.activeQuestion];
     var options = question.incorrect_answers;
     options = options.concat([question.correct_answer]);
     options = this.shuffle(options);
