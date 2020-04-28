@@ -1,8 +1,8 @@
-// Shows sidebar and PlayArea side by side
 import React from "react";
 import Header from "./Header";
 import PlayArea from "./PlayArea";
 import StartQuiz from "./StartQuiz";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 class MainComponent extends React.Component {
   constructor(props) {
@@ -21,25 +21,17 @@ class MainComponent extends React.Component {
   };
 
   render() {
-    let component;
-
-    if (this.state.startQuiz) {
-      component = (
-        <PlayArea category={this.category} difficulty={this.difficulty} />
-      );
-    } else
-      component = (
-        <StartQuiz
-          startQuiz={(category, difficulty) =>
-            this.startQuiz(category, difficulty)
-          }
-        />
-      );
-
     return (
       <>
         <Header />
-        <div className="main">{component}</div>
+        <div className="main">
+          <Router>
+            <Switch>
+              <Route exact path="/" component={StartQuiz} />
+              <Route path="/play" component={PlayArea} />
+            </Switch>
+          </Router>
+        </div>
       </>
     );
   }

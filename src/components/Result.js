@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 class Result extends React.Component {
   render() {
@@ -24,35 +25,45 @@ class Result extends React.Component {
         <div className="statitics">
           <h2>Quiz Result</h2>
           <p>
-            Total questions attented: <span>20</span>
+            Total questions attented:{" "}
+            <span>{this.props.totalQuestionsAttended}</span>
           </p>
           <p>
-            Correct answers: <span>10</span>
+            Correct answers: <span>{this.props.correctAnswers}</span>
           </p>
           <p>
-            Incorrect answers: <span>10</span>
+            Incorrect answers: <span>{this.props.incorrectAnswers}</span>
           </p>
           <p>
-            Total points: <span>20</span>
+            Total points: <span>{this.props.totalPoints}</span>
           </p>
         </div>
 
         <div className="inspiration-div">
-         
-          {/* <p>You are doing great!! </p>
-          <p>try with other categories or difficulty level.</p>
-
-          <p>Do a bit more work to bridge these knowledge gap and try again</p> */}
-
-          <p>Focus on the question and try get the answeres as quickly as possible.</p>
-
+          <p>
+            Focus on the question and try get the answeres as quickly as
+            possible.
+          </p>
         </div>
 
         <div className="new-game-button-div">
-          <button className="try-again-button">Try Again</button>
-          <button className="home-button">
-            <i className="fas fa-home"></i>
-          </button>
+          <Link
+            to={{
+              pathname: "/play",
+              properties: {
+                category: this.props.category,
+                difficulty: !this.props.difficulty,
+                tryAgain: true,
+              },
+            }}
+          >
+            <button className="try-again-button">Try Again</button>
+          </Link>
+          <Link to="/">
+            <button className="home-button">
+              <i className="fas fa-home"></i>
+            </button>
+          </Link>
         </div>
       </div>
     );

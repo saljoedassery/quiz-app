@@ -2,6 +2,7 @@ import React from "react";
 import Question from "./Question";
 import rightArrow from "../images/next.svg";
 import leftArrow from "../images/back.svg";
+import Loader from "react-loader";
 
 class QuizPlay extends React.Component {
   constructor(props) {
@@ -13,14 +14,22 @@ class QuizPlay extends React.Component {
       questionStats: new Array(20),
       minsLeft: "2",
       secondsLeft: "00",
-      quizFinished: false
+      quizFinished: false,
+      actionsButtonStat: false,
+      loading: false,
     };
     this.correctOptions = [];
-    this.markedOptions = new Array(20);
+    this.optionsList = [];
     this.timer = null;
   }
 
-  componentDidMount() {
+  fetchData = () => {
+    console.log(
+      "fetching questions for category ",
+      this.props.category,
+      " and difficulty ",
+      this.props.difficulty
+    );
     let url = `https://opentdb.com/api.php?amount=20&type=multiple&category=${this.props.category}&difficulty=${this.props.difficulty}`;
     fetch(url)
       .then((response) => response.json())
@@ -28,26 +37,65 @@ class QuizPlay extends React.Component {
         //set the first question status to active
         var questionStats = this.state.questionStats;
         questionStats[0] = "active-question";
-        this.setState({ questions: data.results });
+
         //store the correct answers
         data.results.forEach((question) => {
-          this.correctOptions.push(question.correct_answer);
+          var options = this.getOptions(question);
+          this.optionsList.push(options);
+          this.correctOptions.push(options.indexOf(question.correct_answer));
+        });
+        console.log(this.optionsList, this.correctOptions);
+        this.setState({
+          questions: data.results,
+          questionStats: questionStats,
+          loading: true,
         });
         this.timer = setInterval(this.tick, 1000);
       })
       .catch((error) =>
         console.log("Error occurred while fetching questions", error)
       );
+  };
+
+  componentDidMount() {
+    this.setState({
+      loading: false,
+    });
+    this.fetchData();
   }
 
-  findCorrectOptionIndex = (questionIndex) => {
-
+  componentDidUpdate(prevProps) {
+    console.log(prevProps.tryAgain, this.props.tryAgain);
+    if (prevProps.tryAgain !== this.props.tryAgain){
+      this.fetchData();
+    } 
   }
 
-  getOptions = () => {
-    var question = this.state.questions[this.state.activeQuestion];
+  shuffle = (array) => {
+    var currentIndex = array.length,
+      temporaryValue,
+      randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+  };
+
+  getOptions = (question) => {
+    // var question = this.state.questions[this.state.activeQuestion];
     var options = question.incorrect_answers;
     options = options.concat([question.correct_answer]);
+    options = this.shuffle(options);
     return options;
   };
 
@@ -80,8 +128,7 @@ class QuizPlay extends React.Component {
     this.changeQuestionStat(index);
   };
 
-  markAnswer = (index, answer, optionIndex) => {
-    this.markedOptions[index] = answer;
+  markAnswer = (index, optionIndex) => {
     var markedOptionsIndex = this.state.markedOptionsIndex;
     markedOptionsIndex[index] = optionIndex;
 
@@ -120,22 +167,32 @@ class QuizPlay extends React.Component {
   finishQuiz = () => {
     clearInterval(this.timer);
     var questionStats = this.state.questionStats;
+    var totalQuestionsAttended = 0;
+    var totalCorrectAnswers = 0;
 
     //mark attended question correct or incorrect
     for (var i = 0; i < 20; i++) {
-      if (this.correctOptions[i] === this.markedOptions[i]) {
+      if (this.correctOptions[i] === this.state.markedOptionsIndex[i]) {
         questionStats[i] = "correct-question";
+        totalCorrectAnswers += 1;
       } else if (
-        this.correctOptions[i] !== this.markedOptions[i] &&
-        this.markedOptions[i] !== undefined
+        this.correctOptions[i] !== this.state.markedOptionsIndex[i] &&
+        this.state.markedOptionsIndex[i] !== undefined
       ) {
         questionStats[i] = "incorrect-question";
+        totalQuestionsAttended += 1;
       }
     }
     this.setState({
       questionStats: questionStats,
-      quizFinished: true
+      quizFinished: true,
+      actionsButtonStat: true,
     });
+
+    this.props.findResult(
+      totalQuestionsAttended + totalCorrectAnswers,
+      totalCorrectAnswers
+    );
   };
 
   render() {
@@ -190,16 +247,26 @@ class QuizPlay extends React.Component {
         </div>
 
         <div className="action-button-div">
-          <button className="review-button" onClick={this.reviewQuestion}>
+          <button
+            className="review-button"
+            onClick={this.reviewQuestion}
+            disabled={this.state.actionsButtonStat}
+          >
             Mark question for Review
           </button>
-          <button className="finish-button" onClick={this.finishQuiz}>
+          <button
+            className="finish-button"
+            onClick={this.finishQuiz}
+            disabled={this.state.actionsButtonStat}
+          >
             Finish Quiz
           </button>
         </div>
 
         <div className="question-detail-div">
-          <p className="question-number">Question {this.state.activeQuestion + 1} of 20</p>
+          <p className="question-number">
+            Question {this.state.activeQuestion + 1} of 20
+          </p>
           <p className="total-time">
             0{this.state.minsLeft}:{this.state.secondsLeft}s
           </p>
@@ -207,21 +274,25 @@ class QuizPlay extends React.Component {
 
         <hr />
 
-        {this.state.questions.length > 0 && (
-          <Question
-            question={this.state.questions[this.state.activeQuestion].question}
-            options={this.getOptions()}
-            questionNumber={this.state.activeQuestion}
-            markAnswer={(index, answer, optionIndex) =>
-              this.markAnswer(index, answer, optionIndex)
-            }
-            markedOption={
-              this.state.markedOptionsIndex[this.state.activeQuestion]
-            }
-            correctAnswer={3}
-            quizFinished={this.state.quizFinished}
-          />
-        )}
+        <Loader loaded={this.state.loading}>
+          {this.state.questions.length > 0 && (
+            <Question
+              question={
+                this.state.questions[this.state.activeQuestion].question
+              }
+              options={this.optionsList[this.state.activeQuestion]}
+              questionNumber={this.state.activeQuestion}
+              markAnswer={(index, optionIndex) =>
+                this.markAnswer(index, optionIndex)
+              }
+              markedOption={
+                this.state.markedOptionsIndex[this.state.activeQuestion]
+              }
+              correctAnswer={this.correctOptions[this.state.activeQuestion]}
+              quizFinished={this.state.quizFinished}
+            />
+          )}
+        </Loader>
 
         <div className="question-navigation-div">
           <div className="prev-button-div">

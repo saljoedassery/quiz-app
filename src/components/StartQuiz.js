@@ -6,11 +6,7 @@ class StartQuiz extends React.Component {
   render() {
     return (
       <div className="start-quiz">
-        <QuizProperty
-          startQuiz={(category, difficulty) =>
-            this.props.startQuiz(category, difficulty)
-          }
-        />
+        <QuizProperty />
         <Instructions />
       </div>
     );

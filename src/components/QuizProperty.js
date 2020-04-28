@@ -3,6 +3,7 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
 import alertIcon from "../images/alert.svg";
+import { Link } from "react-router-dom";
 
 class QuizProperty extends React.Component {
   constructor(props) {
@@ -39,13 +40,6 @@ class QuizProperty extends React.Component {
       "Cartoon and Animations": "32",
     };
   }
-
-  startQuiz = () => {
-    this.props.startQuiz(
-      this.categoryMap[this.state.category],
-      this.state.difficulty
-    );
-  };
 
   categoryHandle = (event) => {
     this.setState({ category: event });
@@ -101,9 +95,19 @@ class QuizProperty extends React.Component {
         </div>
 
         <div className="button-div">
-          <Button variant="outline-primary" onClick={this.startQuiz}>
-            Start Quiz
-          </Button>
+          <Link
+            to={{
+              pathname: "/play",
+              properties: {
+                category: this.categoryMap[this.state.category],
+                difficulty: this.state.difficulty,
+                tryAgain: false,
+              },
+            }}
+            className="start-quiz-button-link"
+          >
+            <Button variant="outline-primary">Start Quiz</Button>
+          </Link>
 
           <p className="start-instructions">
             <img
@@ -111,8 +115,8 @@ class QuizProperty extends React.Component {
               alt="notification icon"
               className="alert-icon"
             />
-            Quiz starts immediately after you press the start button, before
-            clicking the start button carefully read the instructions
+            Quiz starts immediately after you press the start button. Read the
+            instructions carefully before clicking the start button.
           </p>
         </div>
       </div>

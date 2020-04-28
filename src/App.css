@@ -64,6 +64,19 @@ body {
   margin-top: 20px;
 }
 
+.start-quiz-button-link {
+  text-decoration: none;
+}
+
+.start-quiz-button-link:visited {
+  text-decoration: none;
+}
+
+.start-quiz-button-link:hover {
+  text-decoration: none;
+  color: white;
+}
+
 .start-instructions {
   font-size: 14px;
   font-style: italic;
@@ -106,6 +119,15 @@ body {
 }
 
 /* QuizPlay */
+
+.loader {
+  position: fixed;
+  top: 0;
+  right: 20%;
+  bottom: 0;
+  left: 0;
+  z-index: 9999;
+}
 
 .question-navigation-area {
   background-color: #efefef;
@@ -327,6 +349,7 @@ hr {
 .question-text {
   font-size: 22px;
   font-weight: 600;
+  height: 70px;
 }
 
 .option-div {

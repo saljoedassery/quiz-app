@@ -22,8 +22,6 @@ class Question extends React.Component {
         this.props.quizFinished === true) ||
       prevProps.quizFinished !== this.props.quizFinished
     ) {
-      console.log("Quiz finished");
-      console.log(this.props.markedOption, this.props.correctAnswer);
       var choiceClass = ["", "", "", ""];
       choiceClass[this.props.markedOption] = "incorrect-choice";
       choiceClass[this.props.correctAnswer] = "correct-choice";
@@ -36,11 +34,11 @@ class Question extends React.Component {
       dangerouslySetInnerHTML: { __html: rawHTML },
     });
 
-  markAnswer = (index, option, optionIndex) => {
+  markAnswer = (index, optionIndex) => {
     var optionsClass = ["", "", "", ""];
     optionsClass[optionIndex] = "click";
     this.setState({ optionsClass: optionsClass });
-    this.props.markAnswer(index, option, optionIndex);
+    this.props.markAnswer(index, optionIndex);
   };
 
   render() {
@@ -59,7 +57,7 @@ class Question extends React.Component {
                 type="radio"
                 name="radio"
                 onClick={() =>
-                  this.markAnswer(this.props.questionNumber, option, index)
+                  this.markAnswer(this.props.questionNumber, index)
                 }
               />
               <span className="checkmark">{this.optionIndex[index]}</span>
